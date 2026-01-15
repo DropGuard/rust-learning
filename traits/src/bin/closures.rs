@@ -9,23 +9,10 @@
 // 2. FnMut:  可变借用捕获的变量。
 // 3. Fn:     不可变借用捕获的变量。
 
+// ============================================================================
+use rand::Rng;
 use std::time::{Duration, Instant};
 
-// ============================================================================
-// 高阶函数：接受一个闭包 F
-// 我们强制要求 F 是 Fn (不可变借用)，因为这是一个纯粹的计算函数，
-// 不应该允许闭包修改外部状态（比如计数器）。语义更明确。
-fn calculate<F>(f: F, arr_origin: &[i32]) -> Duration
-where
-    F: Fn(&mut [i32]),
-{
-    let mut arr = arr_origin.to_vec(); // 复制一份数据，避免影响原数据
-    let start = Instant::now();
-    f(&mut arr); // 调用闭包
-    start.elapsed()
-}
-
-// 示例算法：冒泡排序
 fn bubble_sort(arr: &mut [i32]) {
     let n = arr.len();
     for i in 0..n {
@@ -36,8 +23,6 @@ fn bubble_sort(arr: &mut [i32]) {
         }
     }
 }
-
-use rand::Rng;
 
 pub fn quick_sort(arr: &mut [i32]) {
     let n = arr.len();
@@ -93,11 +78,21 @@ fn partition(arr: &mut [i32]) -> usize {
     }
     r
 }
-
+// 高阶函数：接受一个闭包 F
+// 我们强制要求 F 是 Fn (不可变借用)，因为这是一个纯粹的计算函数，
+// 不应该允许闭包修改外部状态（比如计数器）。语义更明确。
+fn calculate<F>(f: F, arr_origin: &[i32]) -> Duration
+where
+    F: Fn(&mut [i32]),
+{
+    let mut arr = arr_origin.to_vec(); // 复制一份数据，避免影响原数据
+    let start = Instant::now();
+    f(&mut arr);
+    start.elapsed()
+}
 fn example_benchmark() {
     println!("--- 算法性能测试 (Algorithm Performance Test) ---");
 
-    // 生成一些测试数据
     let len = 2000;
     let data: Vec<i32> = (0..len).rev().collect(); // 倒序数组，最坏情况
 
