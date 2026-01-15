@@ -1,0 +1,24 @@
+[workspace]
+resolver = "2"
+members = [
+    "concurrency",
+    "error_handling",
+    "file_io",
+    "lifetimes",
+    "networking",
+    "smart_pointers"
+]
+
+[workspace.dependencies]
+walkdir = "2.3"
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", features = ["json", "stream"] }
+axum = "0.7"
+tokio-tungstenite = "0.20"
+futures-util = "0.3"
+tokio-stream = "0.1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tower-http = { version = "0.5", features = ["fs", "cors", "compression-gzip", "trace"] }
+anyhow = "1.0"
+thiserror = "1.0"
