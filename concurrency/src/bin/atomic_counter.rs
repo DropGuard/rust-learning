@@ -10,7 +10,7 @@ fn atomic_counter(thread_number: usize, increments: usize) -> usize {
         let counter = Arc::clone(&counter);
         let handle = thread::spawn(move || {
             for _ in 0..increments {
-                counter.fetch_add(1, Ordering::SeqCst);
+                counter.fetch_add(1, Ordering::Relaxed);
             }
         });
         handles.push(handle);
@@ -20,7 +20,7 @@ fn atomic_counter(thread_number: usize, increments: usize) -> usize {
         handle.join().unwrap();
     }
 
-    let final_count = counter.load(Ordering::SeqCst);
+    let final_count = counter.load(Ordering::Relaxed);
     println!("最终计数: {}", final_count);
     final_count
 }
